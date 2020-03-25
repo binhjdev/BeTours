@@ -1,0 +1,106 @@
+/* body {
+    width: 100%;
+
+} */
+
+.header {
+    width: 100%;
+    height: 100px;
+    background-color:#343a40;
+    margin: 0 auto;
+}
+.headerTrai {
+    width: 50%;
+    height: 30%;
+    float: left;
+}
+.headerPhai {
+    width: 50%;
+    height: 100px;
+    float:right;
+}
+.h1 {
+    margin-top: 25px;
+    margin-left: 70px;
+}
+.buttonHeader a {
+    color: #f1f1f1;
+    text-align: center;
+    font-size: 40px;
+    margin-left: 10px;
+}
+.buttonHeader {
+    width: 50%;
+    height: 50px;
+    float: right;
+    margin-top: 20px;
+}
+.button-text {
+    background-color:#343a40;
+    border-color: #ffffff;
+    border-radius: 25px;
+}
+.button-text a {
+    color:#ffffff;
+    font-size: 25px;
+}
+button-text:hover {
+    background-color:#0085fc;
+  }
+  /* -----section----- */
+.section {
+    width: 100%;
+    height: 750px;
+    margin: 0 auto;
+    background-color: darkgrey;
+
+}
+.fromLogin {
+    width: 40%;
+    height: 400px;
+    margin: 0 auto;
+    background-color: ghostwhite;
+    margin-top: 25px;
+}
+
+/* Full-width input fields */
+input[type=text], input[type=password] {
+  width: 90%;
+  padding: 20px;
+  margin: 5px 0 10px 20px;
+  display: inline-block;
+  border: none;
+  background: #f1f1f1;
+  border-radius: 10px;
+
+}
+
+input[type=text]:focus, input[type=password]:focus {
+  background-color: #ddd;
+  outline: none;
+}
+/* Set a style for all buttons */
+.buttonLogin {
+    width: 20%;
+    height: 50px;
+    margin-top: 20px;
+    background-color:rgb(3, 218, 110);
+    border-radius: 25px;
+    margin-left: 25px;
+}
+.buttonLogin a {
+    color: rgb(252, 252, 252); 
+}
+.container b {
+    margin-left: 25px;
+}
+.container h3 {
+ color: rgb(3, 218, 110);   
+}
+/* ----index---- */
+.container {
+    width: 80%;
+    background-color: blue;
+    height: 300px;
+}
+
