@@ -1,0 +1,20 @@
+{
+    "name": "Bà Nà - Hội An - Huế - Động Thiên Đường/Phong Nha",
+    "maxGroupSize": 30,
+    "ratingsAverage": 4.7,
+    "ratingsQuantity": 37,
+    "price": 680.000,
+    "summary": "Tour ĐN - Bà Nà - Hội An - Huế - Động Thiên Đường/Phong Nha 4N/3Đ - 5N/4Đ - 3N/2Đ",
+    "description": "ĐÀ NẴNG – BÀ NÀ -  ĐÔ THỊ CỔ HỘI AN (Ăn trưa, tối)",
+    "imageCover": "https://staticproxy.mytourcdn.com/0x0,q90/resources/pictures/tours/oxp1436146811_tour-du-lich-cu-lao-cham-trong-1-ngay-dl3.jpg",
+    "images": [
+      "https://staticproxy.mytourcdn.com/0x0,q90/resources/pictures/tours/ccs1436146811_tour-du-lich-cu-lao-cham-trong-1-ngay-dl3.jpg",
+      "thttps://staticproxy.mytourcdn.com/0x0,q90/resources/pictures/tours/ccs1436146811_tour-du-lich-cu-lao-cham-trong-1-ngay-dl3.jpg",
+      "https://staticproxy.mytourcdn.com/0x0,q90/resources/pictures/tours/ccs1436146811_tour-du-lich-cu-lao-cham-trong-1-ngay-dl3.jpg"
+    ],
+    "startDates": [
+      "2021-04-25,10:00",
+      "2021-07-20,10:00",
+      "2021-10-05,10:00"
+    ]
+}

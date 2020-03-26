@@ -1,81 +1,32 @@
-const fs = require('fs');
-const express = require('express');
+const express = require("express");
+const mongoose = require("mongoose");
+const morgan = require("morgan");
+const dotenv = require("dotenv");
+const bodyParser = require("body-parser");
 const app = express();
 
+dotenv.config();
 
-// middleware
-app.use(express.json());
+// connect db
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true })
+    .then(() => console.log("DB connected!"));
 
-
-const PORT = 3000;
-
-// dummy data
-// read data from folder 'dev-data/data/tours-simple.json'
-const tours = JSON.parse(fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`));
-
-// api get all tours
-app.get('/api/v1/tours', (req, res) => {
-    res.status(200).json({
-        status: 'Success',
-        results: tours.length,
-        data: {
-            tours
-        }
-
-    });
+mongoose.connection.on("error", err => {
+    console.log(`DB connection error ${err.message}`);
 });
 
-// api post new tour
-app.post('/api/v1/tour', (req, res) => {
-    // newId = last id of array tours + 1;
-    const newId = tours[tours.length - 1].id + 1;
-    // assign newTour
-    const newTour = Object.assign({ id: newId }, req.body);
+// bring in routes
+const tourRoutes = require('./routes/tour');
+const authRoutes = require('./routes/auth');
 
-    // push newTour to array tours
-    tours.push(newTour);
+// midleware
+app.use(morgan("dev"));
+app.use(bodyParser.json());
+app.use("/api/v1/tours", tourRoutes);
+app.use("/api/v1/users/signup", authRoutes);
 
-    // write new tour to file tours-simple.json
-    fs.writeFile(`${__dirname}/dev-data/data/tours-simple.json`, JSON.stringify(tours), err => {
-        res.status(201).
-        json({
-            status: 'Success',
-            data: {
-                tour: newTour
-            }
-        });
-    });
-});
+const port = process.env.PORT || 8080;
 
-// api get detail tour = id
-app.get('/api/v1/tours/:id', (req, res) => {
-    console.log(req.params);
-    // get id param request
-    const id = req.params.id * 1;
-    // get detail in array tours by id
-    // link stackoverflow : https://stackoverflow.com/questions/7364150/find-object-by-id-in-an-array-of-javascript-objects
-    const tour = tours.find(el => el.id === id);
-
-    
-    if (!tour) {
-        return res.status(404)
-            .json({
-                status: 'fail',
-                message: 'Invalid ID'
-            });
-    }
-
-    res.status(200).
-    json({
-        status: 'Success',
-        data: {
-            tour
-        }
-
-    });
-
-});
-
-app.listen(PORT, () => {
-    console.log(`App running on port ${PORT}`);
+app.listen(port, () => {
+    console.log(`App running on ${port}`);
 });
