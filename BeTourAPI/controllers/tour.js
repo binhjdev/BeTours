@@ -1,4 +1,6 @@
 const Tour = require('../models/tour');
+const catchAsync = require('../utils/catchAsync');
+const AppError = require('../utils/appError');
 
 exports.getAllTours = (req, res) => {
     const tours = Tour.find()
@@ -34,3 +36,18 @@ exports.createNewTour = (req, res) => {
         });
     });
 };
+
+exports.getTour = catchAsync(async (req, res, next) => {
+    const tour = await Tour.findById(req.params.id);
+
+    if (!tour) {
+        return next(new AppError('No tour found with that ID'), 404);
+    }
+
+    res.status(200).json({
+        status: 'Success',
+        data: {
+            tour
+        }
+    });
+});

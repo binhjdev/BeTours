@@ -22,7 +22,8 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: [true, 'Please provide a password'],
-        minlength: 8
+        minlength: 8,
+        select: false
     },
     passwordConfirm: {
         type: String,
@@ -43,11 +44,16 @@ userSchema.pre('save', async function(next) {
 
     // Hash the password with cost 12
     this.password = await bcrypt.hash(this.password, 12);
-    
+
     // Delete passwordconfirm field
     this.passwordConfirm = undefined;
     next();
 });
+
+// function compare password in db
+userSchema.methods.correctPassword = async function(candidatePassword, userPassword) {
+    return await bcrypt.compare(candidatePassword, userPassword);
+}
 
 autoIncrement.initialize(mongoose.connection);
 userSchema.plugin(autoIncrement.plugin, 'User');
