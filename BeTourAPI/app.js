@@ -4,6 +4,7 @@ const morgan = require("morgan");
 const dotenv = require("dotenv");
 const rateLimit = require('express-rate-limit');
 const bodyParser = require("body-parser");
+const cors = require('cors');
 
 const app = express();
 
@@ -33,6 +34,7 @@ const authRoutes = require('./routes/auth');
 // midleware
 app.use(morgan("dev"));
 app.use(bodyParser.json({ limit: '10kb' }));
+app.use(cors());
 app.use("/api/v1/tours", tourRoutes);
 app.use("/api/v1/users", authRoutes);
 

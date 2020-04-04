@@ -1,61 +1,55 @@
 const mongoose = require('mongoose');
-const validator = require('validator');
-const bcrypt = require('bcryptjs');
 const autoIncrement = require('mongoose-auto-increment');
+// define validation lib
+const Joi = require('joi');
 
 // name, email, photo, password, passwordconfirm
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
         trim: true,
-        required: [true, 'Please tell us your name']
+        required: true
     },
     email: {
         type: String,
         trim: true,
-        required: [true, 'Please provide your email'],
-        unique: true,
         lowercase: true,
-        validate: [validator.isEmail, 'Please provide a valid email']
+        required: true,
+        unique: true
     },
     photo: String,
     password: {
         type: String,
-        required: [true, 'Please provide a password'],
+        required: true,
         minlength: 8,
-        select: false
     },
     passwordConfirm: {
         type: String,
-        required: [true, 'Please confirm your password'],
-        validate: {
-            // This only works on CREATE and SAVE
-            validator: function(el) {
-                return el === this.password;
-            },
-            message: 'Passwords are not the same!'
-        }
+        select: false,
+        required: true,
+        minlength: 8,
     }
 });
 
-userSchema.pre('save', async function(next) {
-    // Only run this function if password was actually modified
-    if (!this.isModified('password')) return next();
+// function validate all fields
+function validateUser(user) {
+    const schema = {
+        name: Joi.string().required(),
+        email: Joi.string().required().email(),
+        password: Joi.string().min(8).required(),
+        passwordConfirm: Joi.string().min(8).required().valid(Joi.ref('password')).options({
+            language: {
+                any: {
+                    allowOnly: '!!Passwords do not match',
+                }
+            }
+        })
+    };
 
-    // Hash the password with cost 12
-    this.password = await bcrypt.hash(this.password, 12);
-
-    // Delete passwordconfirm field
-    this.passwordConfirm = undefined;
-    next();
-});
-
-// function compare password in db
-userSchema.methods.correctPassword = async function(candidatePassword, userPassword) {
-    return await bcrypt.compare(candidatePassword, userPassword);
+    return Joi.validate(user, schema);
 }
-
 autoIncrement.initialize(mongoose.connection);
 userSchema.plugin(autoIncrement.plugin, 'User');
 
-module.exports = mongoose.model('User', userSchema);
+module.exports.User = mongoose.model('User', userSchema);
+module.exports.validate = validateUser;
