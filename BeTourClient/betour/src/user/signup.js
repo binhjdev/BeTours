@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import logo from "./logo-white.png";
+import logo from "../logo-white.png";
+import { showAlert } from '../utils/alert';
 
 class signup extends Component {
     constructor() {
@@ -31,16 +32,20 @@ class signup extends Component {
 
         // request api sign up
         this.signup(user).then(data => {
-            if (data.message)
+            if ((data && data.message)) {
                 this.setState({ error: data.message });
-            else
-                this.setState({
-                    name: "",
-                    email: "",
-                    password: "",
-                    passwordConfirm: "",
-                    error: ""
-                });
+                showAlert('error', data.message)
+            }
+            else {
+                if (data.status === 'Success') {
+                    showAlert('success', "Sign up in successfully!");
+                    window.setTimeout(() => {
+                        window.location.assign('/');
+                    }, 1500);
+                }else {
+                    showAlert('error', 'Cannot connected server');
+                }
+            }
         });
 
     }
