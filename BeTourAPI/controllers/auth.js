@@ -92,6 +92,26 @@ exports.logout = (req, res) => {
     res.status(200).json({ status: 'Success' });
 };
 
+exports.getMe = catchAsync(async (req, res, next) => {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+        return res.status(404).json({
+            status: 'Fail',
+            message: 'No user found with that ID'
+        });
+    }
+
+    res.status(200).json({
+        status: 'Success',
+        data: {
+            user : _.pick(user, ['_id', 'name', 'email'])
+        }
+    });
+});
+
+
+
 function validateLogin(req) {
     const schema = {
         email: Joi.string().required().email(),

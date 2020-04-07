@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import auth from '../user/auth';
 
 class home extends Component {
 	render() {
