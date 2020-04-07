@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import logo from "../logo-white.png";
 import { showAlert } from '../utils/alert';
+import { Redirect } from 'react-router-dom';
+import auth from '../user/auth';
 
 class signup extends Component {
     constructor() {
@@ -10,7 +11,9 @@ class signup extends Component {
             email: "",
             password: "",
             passwordConfirm: "",
-            error: ""
+            error: "",
+            redirectToReferer: false,
+            loading: false
         }
     }
 
@@ -20,8 +23,16 @@ class signup extends Component {
         });
     }
 
+    authenticate(token, next) {
+        if (typeof window !== "undefined") {
+            auth.authenticateUser(token);
+            next();
+        }
+    }
+
     clickSubmit = event => {
         event.preventDefault();
+        this.setState({ loading: true })
         const { name, email, password, passwordConfirm } = this.state;
         const user = {
             name,
@@ -33,16 +44,16 @@ class signup extends Component {
         // request api sign up
         this.signup(user).then(data => {
             if ((data && data.message)) {
-                this.setState({ error: data.message });
+                this.setState({ error: data.message, loading: false });
                 showAlert('error', data.message)
             }
             else {
                 if (data.status === 'Success') {
-                    showAlert('success', "Sign up in successfully!");
-                    window.setTimeout(() => {
-                        window.location.assign('/');
-                    }, 1500);
-                }else {
+                    showAlert('success', "Sign up in successfully. Please logged to account");
+                    this.authenticate(data.token, () => {
+                        this.setState({ redirectToReferer: true })
+                    })
+                } else {
                     showAlert('error', 'Cannot connected server');
                 }
             }
@@ -66,44 +77,33 @@ class signup extends Component {
     };
 
     render() {
-        const { name, email, password, passwordConfirm } = this.state
+        const { name, email, password, passwordConfirm, redirectToReferer } = this.state
+
+        if (redirectToReferer) {
+            return <Redirect to="/login" />
+        }
+
         return (
-            <html>
-                <body>
-                    <header className="header">
-                        <nav className="nav nav-tours">
-                            <a className="nav_el" href="/home">All tours</a>
-                        </nav>
-                        <div className="header_logo">
-                            <img src={logo} alt="logo" />
+            <main className="main">
+                <div className="login-form">
+                    <h2 className="heading-secondary ma-bt-lg">Create your account!</h2>
+                    <form className="form form--signup">
+                        <div className="form_group">
+                            <label className="form_label">Your name</label>
+                            <input onChange={this.handleChange("name")} className="form_input" type="text" value={name} />
+                            <label className="form_label">Email address</label>
+                            <input onChange={this.handleChange("email")} className="form_input" placeholder="dangcao@example.com" autoComplete="off" value={email} />
+                            <label className="form_label">Password</label>
+                            <input onChange={this.handleChange("password")} className="form_input" type="password" placeholder="********" autoComplete="off" value={password} />
+                            <label className="form_label">Confirm password</label>
+                            <input onChange={this.handleChange("passwordConfirm")} className="form_input" type="password" placeholder="********" autoComplete="off" value={passwordConfirm} />
                         </div>
-                        <nav className="nav nav-user">
-                            <a className="nav_el" href="/login">Log in</a>
-                            <a className="nav_el nav_el--cta" href="/signup">Sign up</a>
-                        </nav>
-                    </header>
-                    <main className="main">
-                        <div className="login-form">
-                            <h2 className="heading-secondary ma-bt-lg">Create your account!</h2>
-                            <form className="form form--signup">
-                                <div className="form_group">
-                                    <label className="form_label">Your name</label>
-                                    <input onChange={this.handleChange("name")} className="form_input" type="text" value={name} />
-                                    <label className="form_label">Email address</label>
-                                    <input onChange={this.handleChange("email")} className="form_input" placeholder="dangcao@example.com" autoComplete="off" value={email} />
-                                    <label className="form_label">Password</label>
-                                    <input onChange={this.handleChange("password")} className="form_input" type="password" placeholder="********" autoComplete="off" value={password} />
-                                    <label className="form_label">Confirm password</label>
-                                    <input onChange={this.handleChange("passwordConfirm")} className="form_input" type="password" placeholder="********" autoComplete="off" value={passwordConfirm} />
-                                </div>
-                                <div className="form_group">
-                                    <button onClick={this.clickSubmit} className="btn btn--green">Sign up</button>
-                                </div>
-                            </form>
+                        <div className="form_group">
+                            <button onClick={this.clickSubmit} className="btn btn--green">Sign up</button>
                         </div>
-                    </main>
-                </body>
-            </html>
+                    </form>
+                </div>
+            </main>
         );
     }
 }

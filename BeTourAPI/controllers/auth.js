@@ -59,8 +59,8 @@ exports.login = catchAsync(async (req, res, next) => {
         });
     }
 
-    let user = await User.findOne({email: req.body.email});
-    if(!user){
+    let user = await User.findOne({ email: req.body.email });
+    if (!user) {
         return res.status(401).json({
             status: 'Fail',
             message: 'Incorrect email or password'
@@ -69,7 +69,7 @@ exports.login = catchAsync(async (req, res, next) => {
 
     // compare between passwords
     const validPassword = await bcrypt.compare(req.body.password, user.password);
-    if(!validPassword){
+    if (!validPassword) {
         return res.status(401).json({
             status: 'Fail',
             message: 'Incorrect email or password'
@@ -83,6 +83,14 @@ exports.login = catchAsync(async (req, res, next) => {
         token
     });
 });
+
+exports.logout = (req, res) => {
+    res.cookie('token', 'loggedout', {
+        expires: new Date(Date.now() + 10 * 1000),
+        httpOnly: true
+    });
+    res.status(200).json({ status: 'Success' });
+};
 
 function validateLogin(req) {
     const schema = {

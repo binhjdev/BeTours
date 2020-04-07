@@ -5,6 +5,7 @@ const dotenv = require("dotenv");
 const rateLimit = require('express-rate-limit');
 const bodyParser = require("body-parser");
 const cors = require('cors');
+const passport = require('passport');
 
 const app = express();
 
@@ -34,6 +35,7 @@ const authRoutes = require('./routes/auth');
 // midleware
 app.use(morgan("dev"));
 app.use(bodyParser.json({ limit: '10kb' }));
+app.use(passport.initialize());
 app.use(cors());
 app.use("/api/v1/tours", tourRoutes);
 app.use("/api/v1/users", authRoutes);
