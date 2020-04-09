@@ -31,6 +31,7 @@ app.use('/api', limiter);
 // bring in routes
 const tourRoutes = require('./routes/tour');
 const authRoutes = require('./routes/auth');
+const userRoutes = require('./routes/user');
 
 // midleware
 app.use(morgan("dev"));
@@ -39,6 +40,16 @@ app.use(passport.initialize());
 app.use(cors());
 app.use("/api/v1/tours", tourRoutes);
 app.use("/api/v1/users", authRoutes);
+app.use("/api/v1/users", userRoutes);
+
+app.use(function (err, req, res, next) {
+    if(err.name === 'UnauthorizedError'){
+        res.status(401).json({
+            status: 'Fail',
+            message: 'Invalid token...'
+        });
+    }
+});
 
 const port = process.env.PORT || 8080;
 

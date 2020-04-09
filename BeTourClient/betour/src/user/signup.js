@@ -86,20 +86,20 @@ class signup extends Component {
         return (
             <main className="main">
                 <div className="login-form">
-                    <h2 className="heading-secondary ma-bt-lg">Create your account!</h2>
+                    <h2 className="heading-secondary ma-bt-lg">Tạo tài khoản!</h2>
                     <form className="form form--signup">
                         <div className="form_group">
-                            <label className="form_label">Your name</label>
+                            <label className="form_label">Tên</label>
                             <input onChange={this.handleChange("name")} className="form_input" type="text" value={name} />
-                            <label className="form_label">Email address</label>
+                            <label className="form_label">Địa chỉ email</label>
                             <input onChange={this.handleChange("email")} className="form_input" placeholder="dangcao@example.com" autoComplete="off" value={email} />
-                            <label className="form_label">Password</label>
+                            <label className="form_label">Mật khẩu</label>
                             <input onChange={this.handleChange("password")} className="form_input" type="password" placeholder="********" autoComplete="off" value={password} />
-                            <label className="form_label">Confirm password</label>
+                            <label className="form_label">Mật khẩu xác nhận</label>
                             <input onChange={this.handleChange("passwordConfirm")} className="form_input" type="password" placeholder="********" autoComplete="off" value={passwordConfirm} />
                         </div>
                         <div className="form_group">
-                            <button onClick={this.clickSubmit} className="btn btn--green">Sign up</button>
+                            <button onClick={this.clickSubmit} className="btn btn--green">Đăng ký</button>
                         </div>
                     </form>
                 </div>

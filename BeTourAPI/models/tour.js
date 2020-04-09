@@ -7,7 +7,7 @@ const tourSchema = new mongoose.Schema({
         required: [true, 'A tour must have a name'],
         unique: true,
         trim: true,
-        maxlength: [60, 'A tour name must have less or equal then 40 characters'],
+        maxlength: [100, 'A tour name must have less or equal then 40 characters'],
         minlength: [10, 'A tour name must have more or equal then 10 characters']
     },
     maxGroupSize: {
@@ -25,7 +25,7 @@ const tourSchema = new mongoose.Schema({
         default: 0
     },
     price: {
-        type: Number,
+        type: String,
         required: [true, 'A tour must have a price']
     },
     summary: {
@@ -47,32 +47,25 @@ const tourSchema = new mongoose.Schema({
         default: Date.now(),
         select: false
     },
-    startDates: [Date],
-    startLocation: {
-        //GeoJSON
-        type: {
-            type: String,
-            default: 'Point',
-            enum: ['Point']
-        },
-        coordinates: [Number],
-        address: String,
-        description: String
+    startDate: {
+        type: String,
+        required: [true, " A tour must have a start date"]
     },
-    locations: [{
-        type: {
-            type: String,
-            default: 'Point',
-            enum: ['Point']
-        },
-        coordinates: [Number],
-        address: String,
-        description: String,
-        day: Number
-    }]
-}, {
-    toJSON: { virtuals: true },
-    toObject: { virtuals: true }
+    location: {
+        type: String,
+        trim: true,
+        required: [true, 'A tour must have a location']
+    },
+    stationStop: {
+        type: Number,
+        required: [true, 'A tour must have a stop station']
+
+    },
+    timeVisit: {
+        type: String,
+        trim: true,
+        required: [true, 'A tour must have a time visit']
+    }
 });
 
 tourSchema.virtual('durationWeeks').get(function () {

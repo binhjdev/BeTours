@@ -6,6 +6,7 @@ const _ = require('lodash');
 const Joi = require('joi');
 // define crypt password lib
 const bcrypt = require('bcrypt');
+const expressJwt = require('express-jwt');
 
 const signToken = id => {
     return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
@@ -80,7 +81,8 @@ exports.login = catchAsync(async (req, res, next) => {
     const token = signToken(user._id);
     res.status(200).json({
         status: 'Success',
-        token
+        token,
+        user: _.pick(user, ['_id', 'name', 'email'])
     });
 });
 
@@ -92,25 +94,10 @@ exports.logout = (req, res) => {
     res.status(200).json({ status: 'Success' });
 };
 
-exports.getMe = catchAsync(async (req, res, next) => {
-    const user = await User.findById(req.params.id);
-
-    if (!user) {
-        return res.status(404).json({
-            status: 'Fail',
-            message: 'No user found with that ID'
-        });
-    }
-
-    res.status(200).json({
-        status: 'Success',
-        data: {
-            user : _.pick(user, ['_id', 'name', 'email'])
-        }
-    });
+exports.requireSignIn = expressJwt({
+    secret: process.env.JWT_SECRET,
+    userProperty: "auth"
 });
-
-
 
 function validateLogin(req) {
     const schema = {

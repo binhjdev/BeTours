@@ -1,6 +1,6 @@
 class Auth {
     static authenticateUser(token) {
-        localStorage.setItem('token', token);
+        localStorage.setItem('token', JSON.stringify(token));
     }
 
     static isUserAuthenticated() {
@@ -12,7 +12,7 @@ class Auth {
     }
 
     static getToken() {
-        return localStorage.getItem('token');
+        return JSON.parse(localStorage.getItem('token'));
     }
     
 }

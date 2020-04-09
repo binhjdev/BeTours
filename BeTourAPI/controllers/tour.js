@@ -4,7 +4,7 @@ const AppError = require('../utils/appError');
 
 exports.getAllTours = (req, res) => {
     const tours = Tour.find()
-        .select('idTour name maxGroupSize ratingsAverage ratingsQuantity price summary description imageCover images startDates')
+        .select('_id name maxGroupSize ratingsAverage ratingsQuantity price summary description imageCover images startDate location stationStop timeVisit')
         .then(tours => {
             res.status(200).json({
                 status: 'Success',
@@ -12,7 +12,6 @@ exports.getAllTours = (req, res) => {
                 data: {
                     tours
                 }
-
             });
         })
         .catch(err => console.log(err));
